@@ -20,7 +20,7 @@
 7. 目前规则仅仅匹配文件名，不匹配路径
 8. 客户端可以配置baseUrl，为调用api的地址和端口，或者域名，可以配置为将不同dir同步到不同的服务器中
 9. <Commands>标签下的为服务器进程的关闭和重新启动，可以参考下面的代码，这里的name可以配置多个，以实现一次性关闭多个进程或者启动多个进程
-    ```shell
-    			<cmd name="start" file="D:\Chaomos\Bin\Server.exe" args=""  workdir="D:\Chaomos\Bin\"></cmd>
-			    <cmd name="stop" file="taskkill.exe" args=" /F /IM  Server.exe" workdir="C:\Windows\System32\"></cmd>
+    ```xml
+    <cmd name="start" file="D:\Chaomos\Bin\Server.exe" args=""  workdir="D:\Chaomos\Bin\"></cmd>
+    <cmd name="stop" file="taskkill.exe" args=" /F /IM  Server.exe" workdir="C:\Windows\System32\"></cmd>
     ```
