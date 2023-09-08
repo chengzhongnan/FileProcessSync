@@ -30,14 +30,16 @@ namespace FileProcessSync.Handler
             var cmdMap = Config.CommandConfig.Instance.CommandMap;
             if (cmdMap.ContainsKey(Cmd))
             {
-                var config = cmdMap[Cmd];
-                Process process = new Process();
-                process.StartInfo.WorkingDirectory = config.WorkDir;
-                process.StartInfo.FileName = config.FileName;
-                process.StartInfo.Arguments = config.Argument;
-                process.StartInfo.UseShellExecute = true;
+                foreach(var config in cmdMap[Cmd])
+                {
+                    Process process = new Process();
+                    process.StartInfo.WorkingDirectory = config.WorkDir;
+                    process.StartInfo.FileName = config.FileName;
+                    process.StartInfo.Arguments = config.Argument;
+                    process.StartInfo.UseShellExecute = true;
 
-                process.Start();
+                    process.Start();
+                }
             }
             else
             {

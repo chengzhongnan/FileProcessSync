@@ -28,11 +28,18 @@ namespace FileProcessSync.Config
                 CmdConfig cmd = new CmdConfig();
                 cmd.Load(item);
 
-                CommandMap.Add(cmd.Name, cmd);
+                if (CommandMap.ContainsKey(cmd.Name))
+                {
+                    CommandMap[cmd.Name].Add(cmd);
+                }
+                else
+                {
+                    CommandMap.Add(cmd.Name, new List<CmdConfig>() { cmd });
+                }
             }
         }
 
-        public Dictionary<string, CmdConfig> CommandMap { get; set; } = new Dictionary<string, CmdConfig>();
+        public Dictionary<string, List<CmdConfig>> CommandMap { get; set; } = new Dictionary<string, List<CmdConfig>>();
     }
 
     class CmdConfig
