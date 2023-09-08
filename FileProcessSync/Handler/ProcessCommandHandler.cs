@@ -28,10 +28,14 @@ namespace FileProcessSync.Handler
         {
             Response response = new Response();
             var cmdMap = Config.CommandConfig.Instance.CommandMap;
+
+            Log.Debug($"执行命令：{Cmd}");
+
             if (cmdMap.ContainsKey(Cmd))
             {
                 foreach(var config in cmdMap[Cmd])
                 {
+                    Log.Debug($"正在执行命令：{config.FileName} {config.Argument}");
                     Process process = new Process();
                     process.StartInfo.WorkingDirectory = config.WorkDir;
                     process.StartInfo.FileName = config.FileName;

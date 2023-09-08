@@ -126,11 +126,41 @@ namespace FileProcessSync.Handler
             return JsonConvert.DeserializeObject<FileMd5Response>(respData);
         }
 
-        public static async Task<string> ProcessCommand(string command)
+        private static List<string> GetAllBaseUrl()
+        {
+            List<string> baseUrl = new List<string>();
+            if (!string.IsNullOrEmpty(Config.ServerConfig.Instance.BaseUrl))
+            {
+                baseUrl.Add(Config.ServerConfig.Instance.BaseUrl);
+            }
+
+            foreach(var work in Config.SyncDirectoryConfig.Instance.WorkDirConfigs)
+            {
+                if (!string.IsNullOrEmpty(work.BaseUrl))
+                {
+                    if (!baseUrl.Contains(work.BaseUrl))
+                    {
+                        baseUrl.Add(work.BaseUrl);
+                    }
+                }
+            }
+
+            return baseUrl;
+        }
+
+        public static async Task ProcessCommand(string command)
         {
             var apiPath = "/sync/api/cmd";
-            var respData = await StaticExtension.SendRequestGet(Config.ServerConfig.Instance.BaseUrl + apiPath + "?cmd=" + command);
-            return respData;
+            var baseUrlList = GetAllBaseUrl();
+            foreach(var url in baseUrlList)
+            {
+                try
+                {
+                    await StaticExtension.SendRequestGet(url + apiPath + "?cmd=" + command);
+                }
+                finally { }
+            }
+            
         }
 
         public static async Task<string> PostWorkFile(Config.WorkDirConfig workDir, FileMD5Info file)
@@ -148,9 +178,18 @@ namespace FileProcessSync.Handler
             };
 
             var postData = JsonConvert.SerializeObject(syncFileInfo);
-            var respData = await StaticExtension.SendRequestPost(Config.ServerConfig.Instance.BaseUrl + apiPath, postData);
+            if (string.IsNullOrEmpty(workDir.BaseUrl))
+            {
+                var respData = await StaticExtension.SendRequestPost(Config.ServerConfig.Instance.BaseUrl + apiPath, postData);
 
-            return respData;
+                return respData;
+            }
+            else
+            {
+                var respData = await StaticExtension.SendRequestPost(workDir.BaseUrl + apiPath, postData);
+
+                return respData;
+            }
         }
     }
 

@@ -64,6 +64,7 @@ namespace FileProcessSync.Handler
                 {
                     CreateDirectory(dir);
                 }
+                Log.Debug($"正在更新文件：{file}");
                 System.IO.File.WriteAllBytes(file, syncInfo.FileData);
             }
             else
