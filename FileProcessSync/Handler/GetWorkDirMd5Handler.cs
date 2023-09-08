@@ -16,6 +16,9 @@ namespace FileProcessSync.Handler
     {
         public override string Raw => "/sync/api/md5";
 
+        [HttpServerLib.HttpField("dir")]
+        public string WorkDir { get; set; }
+
         class Response
         {
             public string state { get; set; }
@@ -59,11 +62,12 @@ namespace FileProcessSync.Handler
 
             foreach(var config in Config.SyncDirectoryConfig.Instance.WorkDirConfigs)
             {
-                ResponseData data = new ResponseData() { DirName = config.Name };
-
-                data.files.AddRange(GetConfigFileMD5Info(config));
-
-                response.data.Add(data);
+                if (string.IsNullOrEmpty(WorkDir) || WorkDir == config.Name)
+                {
+                    ResponseData data = new ResponseData() { DirName = config.Name };
+                    data.files.AddRange(GetConfigFileMD5Info(config));
+                    response.data.Add(data);
+                }
             }
 
             return Task.FromResult(JsonConvert.SerializeObject(response));

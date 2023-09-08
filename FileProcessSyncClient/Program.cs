@@ -12,11 +12,11 @@ namespace FileProcessSync
         {
             // 先关闭服务器
             await FileHelper.ProcessCommand("stop");
-
-            var serverData = await FileHelper.GetServerMd5Data();
             
             foreach(var workDir in Config.SyncDirectoryConfig.Instance.WorkDirConfigs)
             {
+                var serverData = await FileHelper.GetServerMd5Data(workDir.BaseUrl, workDir.Name);
+
                 var findServerDir = serverData.data.Find(x => x.DirName == workDir.Name);
                 if (findServerDir != null)
                 {

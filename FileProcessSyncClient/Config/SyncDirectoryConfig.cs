@@ -44,6 +44,7 @@ namespace FileProcessSync.Config
             Name = xEle.Attribute("name").Value;
             IncludeSubDir = bool.Parse(xEle.Attribute("includeSubDir").Value);
             Path = xEle.Attribute("path").Value;
+            BaseUrl = xEle.Attribute("baseUrl").Value;
             foreach (var xSub in xEle.Elements("match"))
             {
                 Matches.Add(xSub.Value);
@@ -91,6 +92,7 @@ namespace FileProcessSync.Config
             return workDir;
         }
 
+        public string BaseUrl { get; set; }
         public string Name { get; set; }
         public bool IncludeSubDir { get; set; }
         public string Path { get; set; }
