@@ -1,0 +1,8 @@
+FileProcessSync/bin/
+FileProcessSync/obj/
+FileProcessSyncClient/bin/
+FileProcessSyncClient/obj/
+HttpServerLib/bin/
+HttpServerLib/obj/
+ProjectCommon/bin/
+ProjectCommon/obj/
