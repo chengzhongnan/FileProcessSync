@@ -118,10 +118,10 @@ namespace FileProcessSync.Handler
             return (different, serverOnly);
         }
 
-        public static async Task<FileMd5Response> GetServerMd5Data()
+        public static async Task<FileMd5Response> GetServerMd5Data(string serverUrl, string name)
         {
             var apiPath = "/sync/api/md5";
-            var respData = await StaticExtension.SendRequestGet(Config.ServerConfig.Instance.BaseUrl + apiPath);
+            var respData = await StaticExtension.SendRequestGet(serverUrl + apiPath + "?dir=" + name);
 
             return JsonConvert.DeserializeObject<FileMd5Response>(respData);
         }
