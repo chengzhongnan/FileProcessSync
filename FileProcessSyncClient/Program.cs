@@ -24,7 +24,8 @@ namespace FileProcessSync
                     foreach (var file in different)
                     {
                         Console.WriteLine("正在同步：" + file.FileName);
-                        await FileHelper.PostWorkFile(workDir, file);
+                        var resp = await FileHelper.PostWorkFile(workDir, file);
+                        Console.WriteLine(resp);
                     }
                 }
             }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using log4net;
 using Newtonsoft.Json;
 
 #pragma warning disable CS8602 // 解引用可能出现空引用。
@@ -33,13 +34,24 @@ namespace FileProcessSync.Handler
 
         private static void CreateDirectory(string path)
         {
+            path = Path.GetFullPath(path);
+
             // 拆分目录路径为各级目录
             string[] directories = path.Split('/');
 
             string currentPath = "";
 
+            if (Environment.OSVersion.Platform == PlatformID.Unix)
+            {
+                currentPath = "/";
+            }
+
             foreach (string directory in directories)
             {
+                if (string.IsNullOrWhiteSpace(directory))
+                {
+                    continue;
+                }
                 currentPath = Path.Combine(currentPath, directory);
                 if (!Directory.Exists(currentPath))
                 {
@@ -56,10 +68,16 @@ namespace FileProcessSync.Handler
             SyncFileInfo syncInfo = JsonConvert.DeserializeObject<SyncFileInfo>(json);
 
             var config = Config.SyncDirectoryConfig.Instance.WorkDirConfigs.Find(x => x.Name == syncInfo.SyncName);
+            if (!Directory.Exists(config.Path))
+            {
+                var path = Path.GetFullPath(config.Path);
+                CreateDirectory(path);
+            }
             if (config != null)
             {
                 var file = config.Path + syncInfo.SyncFile;
-                var dir = Path.GetDirectoryName(file);
+                var dir = Path.GetFullPath(file);
+                dir = Path.GetDirectoryName(dir);
                 if (!Directory.Exists(dir))
                 {
                     CreateDirectory(dir);

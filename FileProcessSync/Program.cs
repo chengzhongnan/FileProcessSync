@@ -15,8 +15,7 @@ namespace FileProcessSync
             HttpService service = new HttpService();
             service.RegisterServer();
 
-
-            while (Console.ReadKey().KeyChar != 'q')
+            while (true)
             {
                 await Task.Delay(100);
             }
